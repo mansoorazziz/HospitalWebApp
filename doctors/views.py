@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import DoctorForm
 from .models import Doctor
-
+# from django.contrib import messages
 # Create your views here.
 
 # Adding new Doctors
@@ -10,6 +10,8 @@ def add_doctor(request):
         form = DoctorForm(request.POST)
         if form.is_valid():
             form.save()
+            # messages.success(request, 'Doctor added successfully!')
+            # return redirect('add_doctor') # Redirect back to the same page to show the modal
             return redirect('doctor_list')  # Redirect to a list view or another page after saving
     else:
         form = DoctorForm()

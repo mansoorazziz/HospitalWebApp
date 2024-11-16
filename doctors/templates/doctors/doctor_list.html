@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hospital Management System</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add this line -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,7 +22,7 @@
 						<h2>Manage <b>Doctors</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Doctor</span></a>
+						<a href="#addDoctorModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Doctor</span></a>
 						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
 					</div>
                 </div>
@@ -50,31 +51,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-						<td>1</td>
-                        <td>Thomas Hardy</td>
-						<td>28-11-1989</td>
-						<td>Male</td>
-						<td>37201-5871324-5</td>
-						<td>(171) 555-2222</td>
-                        <td>thomashardy@mail.com</td>
-						<td>89 Chiaroscuro Rd, Portland, USA</td>
-						<td>Child Specialist</td>
-						<td>11-16-2024</td>
-						<td>yes</td>
-                        
-                        <td>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                        </td>
-                    </tr> 
-                </tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox{{ forloop.counter }}" name="options[]" value="{{ doctor.serial_no }}">
+                            <label for="checkbox{{ forloop.counter }}"></label>
+                        </span>
+                    </td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
+                    <td>{{ doctor.date_of_birth }}</td>
+                    <td>{{ doctor.get_gender_display }}</td>
+                    <td>{{ doctor.cnic_no }}</td>
+                    <td>{{ doctor.phone_number }}</td>
+                    <td>{{ doctor.email }}</td>
+                    <td>{{ doctor.address }}</td>
+                    <td>{{ doctor.get_specialty_display }}</td>
+                    <td>{{ doctor.date_hired }}</td>
+                    <td>{{ doctor.is_active|yesno:"Yes,No" }}</td>
+                    <td>
+                        <!-- Add action buttons like Edit/Delete here if needed -->
+                        <a href="#" class="edit" title="Edit"><i class="fas fa-edit"></i></a>
+                        <a href="#" class="delete" title="Delete"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
             </table>
 			<div class="clearfix">
                 <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
@@ -91,11 +94,12 @@
         </div>
     </div>
 
-    <!-- Add Doctor Modal -->
-    <div id="addEmployeeModal" class="modal fade">
+	<!-- Add Doctor Modal -->
+    <div id="addDoctorModal" class="modal fade">
         <div class="modal-dialog" style="max-width: 90%;">
             <div class="modal-content">
-                <form>
+                <form method="post" action="{% url 'add_doctor' %}">
+                    {% csrf_token %}
                     <div class="modal-header">                      
                         <h4 class="modal-title">Add Doctor</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -105,80 +109,66 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>First Name</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" class="form-control" name="first_name" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Date Of Birth</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="date" class="form-control" name="date_of_birth" required>
                                 </div>
                                 <div class="form-group">
                                     <label>CNIC</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" class="form-control" name="cnic_no" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input type="email" class="form-control" required>
+                                    <input type="email" class="form-control" name="email" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Speciality</label>
-                                    <select name="specialty" required id="id_specialty">
-										<option value="" selected>---------</option>
-									  
-										<option value="GP">General Practitioner</option>
-									  
-										<option value="Pediatrician">Pediatrician</option>
-									  
-										<option value="Cardiologist">Cardiologist</option>
-									  
-										<option value="Dermatologist">Dermatologist</option>
-									  
-										<option value="Neurologist">Neurologist</option>
-									  
-										<option value="Surgeon">Surgeon</option>
-									  
-									</select>
+                                    <select name="specialty" class="form-control" required>
+                                        <option value="">---------</option>
+                                        <option value="GP">General Practitioner</option>
+                                        <option value="Pediatrician">Pediatrician</option>
+                                        <option value="Cardiologist">Cardiologist</option>
+                                        <option value="Dermatologist">Dermatologist</option>
+                                        <option value="Neurologist">Neurologist</option>
+                                        <option value="Surgeon">Surgeon</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Availibility</label>
-                                    <select name="availibility" required id="id_Availibility">
-										<option value="" selected>---------</option>
-									  
-										<option value="yes">YES</option>
-									  
-										<option value="no">NO</option>
-									  
-									</select>
+                                    <label>Availability</label>
+                                    <select name="is_active" class="form-control" required>
+                                        <option value="">---------</option>
+                                        <option value="True">YES</option>
+                                        <option value="False">NO</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Last Name</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" class="form-control" name="last_name" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Gender</label>
-									<select name="gender" required id="id_gender">
-										<option value="" selected>---------</option>
-									  
-										<option value="M">Male</option>
-									  
-										<option value="F">Female</option>
-									  
-										<option value="O">Other</option>
-									  
-									</select
+                                    <select name="gender" class="form-control" required>
+                                        <option value="">---------</option>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+                                        <option value="O">Other</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" class="form-control" name="phone_number" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <textarea class="form-control" required></textarea>
+                                    <textarea class="form-control" name="address" required></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Date Hired</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="date" class="form-control" name="date_hired" required>
                                 </div>
                             </div>
                         </div>
@@ -191,6 +181,7 @@
             </div>
         </div>
     </div>
+
 
 	<!-- Edit Modal HTML -->
 	<div id="editEmployeeModal" class="modal fade">
