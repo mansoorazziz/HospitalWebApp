@@ -7,3 +7,4 @@ urlpatterns = [
     path('delete/<int:serial_no>/',views.delete_doctor, name='delete_doctor'), # Delete Doctor
     path('edit/<int:serial_no>/',views.edit_doctor, name='edit_doctor'), # Update Doctor
 ]
+
