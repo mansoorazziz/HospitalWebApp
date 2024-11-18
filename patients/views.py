@@ -19,16 +19,16 @@ def patient_list(request):
     return render(request, 'patients/patient_list.html', {'patients': patients})
 
 # Patient deletion
-def delete_patient(request, id):
-    patient = get_object_or_404(Patient, id=id)
+def delete_patient(request, serial_no):
+    patient = get_object_or_404(Patient, serial_no=serial_no)
     if request.method == 'POST':
         patient.delete()
         return redirect('patient_list')
     return render(request, 'patients/delete_patient.html', {'patient': patient})
 
 # Update Patient
-def edit_patient(request, id):
-    patient = get_object_or_404(Patient, id=id)
+def edit_patient(request, serial_no):
+    patient = get_object_or_404(Patient, serial_no=serial_no)
     if request.method == 'POST':
         form = PatientForm(request.POST, instance=patient)
         if form.is_valid():
