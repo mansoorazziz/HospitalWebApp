@@ -6,12 +6,9 @@ from .models import Appointment,Doctor,Patient
 def add_appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
-        print(request.POST) # Debug: Print POST data
         if form.is_valid():
             form.save()
             return redirect('appointment_list')
-        else: 
-            print(form.errors) # Debug: Print form errors
     else:
         form = AppointmentForm()
     return render(request, 'appointments/add_appointment.html', {'form': form})

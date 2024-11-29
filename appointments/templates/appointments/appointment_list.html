@@ -64,10 +64,76 @@
                             <td>{{ appointment.status }}</td>
                             <td>{{ appointment.notes }}</td>
                             <td>
-                                <a href="{% url 'edit_appointment' appointment.serial_no %}" class="edit" title="Edit"><i class="fa fa-edit"></i></a>
+                                <a href="#editAppointmentModal{{ appointment.serial_no }}" class="edit" data-toggle="modal" title="Edit"><i class="fa fa-edit"></i></a>
                                 <a href="#deleteAppointmentModal{{ appointment.serial_no }}" class="delete" data-toggle="modal" title="Delete"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
+
+                        <!-- Edit Appointment Modal -->
+                        <div id="editAppointmentModal{{ appointment.serial_no }}" class="modal fade">
+                            <div class="modal-dialog" style="max-width: 90%;">
+                                <div class="modal-content">
+                                    <form method="post" action="{% url 'edit_appointment' appointment.serial_no %}">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Edit Appointment</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Patient</label>
+                                                        <select name="patient" class="form-control" required>
+                                                            <option value="">---------</option>
+                                                            {% for patient in patients %}
+                                                            <option value="{{ patient.serial_no }}" {% if appointment.patient.serial_no == patient.serial_no %}selected{% endif %}>{{ patient.first_name }} {{ patient.last_name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Doctor</label>
+                                                        <select name="doctor" class="form-control" required>
+                                                            <option value="">---------</option>
+                                                            {% for doctor in doctors %}
+                                                            <option value="{{ doctor.serial_no }}" {% if appointment.doctor.serial_no == doctor.serial_no %}selected{% endif %}>{{ doctor.first_name }} {{ doctor.last_name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Appointment Date</label>
+                                                        <input type="datetime-local" class="form-control" name="appointment_date" value="{{ appointment.appointment_date|date:'Y-m-d\TH:i' }}" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Reason for Visit</label>
+                                                        <textarea class="form-control" name="reason_for_visit" required>{{ appointment.reason_for_visit }}</textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Status</label>
+                                                        <select name="status" class="form-control" required>
+                                                            <option value="Scheduled" {% if appointment.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                                                            <option value="Completed" {% if appointment.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                                            <option value="Cancelled" {% if appointment.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Notes</label>
+                                                        <textarea class="form-control" name="notes">{{ appointment.notes }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                            <input type="submit" class="btn btn-primary" value="Save">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <!-- Delete Modal HTML for each appointment -->
                         <div id="deleteAppointmentModal{{ appointment.serial_no }}" class="modal fade">
