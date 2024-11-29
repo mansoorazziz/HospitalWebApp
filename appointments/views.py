@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import AppointmentForm
-from .models import Appointment,Doctor,Patient
+from .forms import AppointmentForm, PrescriptionForm
+from .models import Appointment,Doctor,Patient, Prescription
 
 # Add new appointment
 def add_appointment(request):
@@ -44,3 +44,19 @@ def delete_appointment(request, serial_no):
         appointment.delete()
         return redirect('appointment_list')
     return render(request, 'appointments/delete_appointment.html', {'appointment': appointment})
+
+# Create prescription
+def create_prescription(request, serial_no):
+    appointment = get_object_or_404(Appointment, serial_no=serial_no)
+    if request.method == 'POST':
+        form = PrescriptionForm(request.POST)
+        if form.is_valid():
+            prescription = form.save(commit=False)
+            prescription.appointment = appointment
+            prescription.doctor = appointment.doctor
+            prescription.patient = appointment.patient
+            prescription.save()
+            return redirect('appointment_list')
+    else:
+        form = PrescriptionForm()
+    return render(request, 'prescriptions/create_prescription.html', {'form': form, 'appointment': appointment})
