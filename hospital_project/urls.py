@@ -9,5 +9,6 @@ urlpatterns = [
     path('appointments/', include('appointments.urls')),
     path('accounts/', include('accounts.urls')),
     path('', RedirectView.as_view(url='/accounts/login/', permanent=True)),  # Redirect to login page
+    path('medicsandlabs/', include('medicsandlabs.urls')),
     # path('billing/', include('billing.urls')),
 ]

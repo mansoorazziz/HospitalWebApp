@@ -57,8 +57,8 @@
                                 </span>
                             </td>
                             <td>{{ forloop.counter }}</td>
-                            <!-- <td><a href="{% url 'create_prescription' appointment.serial_no %}">{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</a></td> -->
-                            <td><a href="{% url 'create_prescription' appointment.serial_no %}">{{ appointment.patient }}</a></td>
+                            
+                            <td>{{ appointment.patient }}</td>
                             <td>{{ appointment.doctor }}</td>
                             <td>{{ appointment.appointment_date }}</td>
                             <td>{{ appointment.reason_for_visit }}</td>

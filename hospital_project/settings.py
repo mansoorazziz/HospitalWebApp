@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'appointments',
     'billing',
     'accounts',
+    'medicsandlabs'
+    # 'django_select2',
 ]
 
 MIDDLEWARE = [

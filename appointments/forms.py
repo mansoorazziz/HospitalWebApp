@@ -1,5 +1,6 @@
 from django import forms
-from .models import Appointment, Prescription
+from .models import Appointment
+
 
 class AppointmentForm(forms.ModelForm):
     class Meta:
@@ -9,10 +10,3 @@ class AppointmentForm(forms.ModelForm):
             'appointment_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
-
-# -------------------Prescription----------------------------------
-
-class PrescriptionForm(forms.ModelForm):
-    class Meta:
-        model = Prescription
-        fields = ['medication', 'dosage', 'instructions']
