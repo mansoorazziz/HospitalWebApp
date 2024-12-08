@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment
+from .models import Appointment,Prescription
 
 
 class AppointmentForm(forms.ModelForm):
@@ -10,3 +10,12 @@ class AppointmentForm(forms.ModelForm):
             'appointment_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
+# ------------------------------------------------Prescription Form--------------------------------------------
+class PrescriptionForm(forms.ModelForm):
+    class Meta:
+        model = Prescription
+        fields = ['medication', 'labtest', 'dosage', 'instructions']
+        widgets = {
+            'medication': forms.Select(attrs={'class': 'form-control select2'}),
+            'labtest': forms.Select(attrs={'class': 'form-control select2'}),
+        }

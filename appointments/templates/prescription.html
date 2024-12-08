@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 25%;
+            padding: 20px;
+        }
+        .content {
+            width: 75%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .prescription-areas {
+            display: flex;
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        .labtests-area {
+            width: 25%;
+            padding: 10px;
+            border-right: 1px solid #ddd;
+        }
+        .medicines-area {
+            width: 75%;
+            padding: 10px;
+        }
+        .medicines-table th, .medicines-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="form-group">
+                <label for="medicinesDropdown">Select Medicine</label>
+                <select id="medicinesDropdown" class="form-control select2">
+                    <!-- Medicines options will be populated dynamically -->
+                    {% for medication in medications %}
+                    <option value="{{ medication.id }}">{{ medication.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="labTestsDropdown">Select Lab Test</label>
+                <select id="labTestsDropdown" class="form-control select2">
+                    <!-- Lab tests options will be populated dynamically -->
+                    {% for labtest in labtests %}
+                    <option value="{{ labtest.id }}">{{ labtest.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="content">
+            <h3>Prescription Form</h3>
+            <div class="prescription-areas">
+                <div class="labtests-area">
+                    <h5>Lab Tests</h5>
+                    <textarea id="labTestsTextArea" class="form-control" readonly></textarea>
+                </div>
+                <div class="medicines-area">
+                    <h5>Medicines</h5>
+                    <table class="table table-bordered medicines-table">
+                        <thead>
+                            <tr>
+                                <th>Sr</th>
+                                <th>Medicine Name</th>
+                                <th>Dose (MLs)</th>
+                                <th>Morning</th>
+                                <th>Afternoon</th>
+                                <th>Evening</th>
+                                <th>Night</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicinesTableBody">
+                            <!-- Medicine entries will be populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" onclick="printPrescription()">Print Prescription</button>
+        </div>
+    </div>
+
+    <!-- Medicine Details Modal -->
+    <div class="modal fade" id="medicineDetailsModal" tabindex="-1" role="dialog" aria-labelledby="medicineDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="medicineDetailsModalLabel">Medicine Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="medicineDetailsForm">
+                        <div class="form-group">
+                            <label for="medicineName">Medicine Name</label>
+                            <input type="text" id="medicineName" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Doses</label>
+                            <div class="form-check">
+                                <input type="checkbox" id="doseMorning" class="form-check-input">
+                                <label for="doseMorning" class="form-check-label">Morning</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="doseAfternoon" class="form-check-input">
+                                <label for="doseAfternoon" class="form-check-label">Afternoon</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="doseEvening" class="form-check-input">
+                                <label for="doseEvening" class="form-check-label">Evening</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="doseNight" class="form-check-input">
+                                <label for="doseNight" class="form-check-label">Night</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="doseAmount">Dose (MLs)</label>
+                            <input type="text" id="doseAmount" class="form-control">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="addMedicineButton">OK</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

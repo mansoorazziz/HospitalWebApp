@@ -1,6 +1,7 @@
 from django.db import models
 
 class Medicine(models.Model):
+
     name = models.CharField(max_length=100)
     morning = models.BooleanField(default=False)
     afternoon = models.BooleanField(default=False)
@@ -11,6 +12,7 @@ class Medicine(models.Model):
         return self.name
 
 class LabTest(models.Model):
+    # serial_noLabs = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
