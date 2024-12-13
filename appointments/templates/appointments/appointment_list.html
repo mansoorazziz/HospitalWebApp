@@ -58,7 +58,7 @@
                                 </span>
                             </td>
                             <td>{{ forloop.counter }}</td>
-                            <td><a href="{% url 'prescription_view' appointment.serial_no %}" target="_blank">{{ appointment.patient }}</a></td>
+                            <td><a href="{% url 'prescription_view' appointment.serial_no %}?patient={{ appointment.patient }}&doctor={{ appointment.doctor }}" target="_blank">{{ appointment.patient }}</a></td>
                             <!-- <td>{{ appointment.patient }}</td> -->
                             <td>{{ appointment.doctor }}</td>
                             <td>{{ appointment.appointment_date }}</td>

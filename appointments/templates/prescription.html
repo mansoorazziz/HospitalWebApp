@@ -37,7 +37,6 @@
             .medicines-area {
                 width: 75%;
                 padding: 10px;
-                background-color: orange;
             }
             .medicines-table th, .medicines-table td {
                 text-align: center;
@@ -70,6 +69,8 @@
             </div>
             <div class="content">
                 <h3>Prescription Form</h3>
+                <h5>Patient: {{ appointment.patient }}</h5> 
+                <h5>Doctor: {{ appointment.doctor }}</h5>
                 <div class="prescription-areas">
                     <div class="labtests-area">
                         <h5>Lab Tests</h5>
@@ -80,13 +81,13 @@
                         <table class="table table-bordered medicines-table">
                             <thead>
                                 <tr>
-                                    <th>Sr</th>
-                                    <th>Medicine Name</th>
-                                    <th>Dose (MLs)</th>
-                                    <th>Morning</th>
-                                    <th>Afternoon</th>
-                                    <th>Evening</th>
-                                    <th>Night</th>
+                                    <th>سیریل نمبر</th>
+                                    <th>دوا</th>
+                                    <th>مقدار (ملی لیٹر)</th>
+                                    <th>صبح</th>
+                                    <th> دوپہر</th>
+                                    <th>شام</th>
+                                    <th>رات</th>
                                 </tr>
                             </thead>
                             <tbody id="medicinesTableBody">
@@ -194,6 +195,10 @@
                 $('#medicinesTableBody').append(newRow);
                 $('#medicineDetailsModal').modal('hide');
             });
+            // Update patient and doctor names on load 
+            const patientName = "{{ appointment.patient }}"; 
+            const doctorName = "{{ appointment.doctor }}"; 
+            $('#patientInfo').text(`Prescription Form for ${patientName} by Dr. ${doctorName}`);
         });
 
             function printPrescription() {
