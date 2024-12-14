@@ -28,3 +28,5 @@ def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to login page after logout
 
+def home(request): 
+    return render(request, 'accounts/home.html')
