@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from .forms import PatientForm
-from .models import Patient
+from .models import Patient, ArchivedPatient
 
 # Adding new Patients
 def add_patient(request):
@@ -37,3 +38,24 @@ def edit_patient(request, serial_no):
     else:
         form = PatientForm(instance=patient)
     return render(request, 'patients/edit_patient.html', {'form': form, 'patient': patient})
+
+# Refresh Patient List
+def refresh_patient_list(request):
+    if request.method == 'POST':
+        # Archive current patient list
+        patients = Patient.objects.all()
+        for patient in patients:
+            ArchivedPatient.objects.create(
+                serial_no=patient.serial_no,
+                first_name=patient.first_name,
+                last_name=patient.last_name,
+                date_of_birth=patient.date_of_birth,
+                medical_record=patient.medical_record,
+                cnic_no=patient.cnic_no,
+                gender=patient.gender
+            )
+        # Clear the patient list
+        Patient.objects.all().delete()
+        return JsonResponse({'message': 'Patient list refreshed successfully!'})
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
