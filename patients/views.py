@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import PatientForm
 from .models import Patient, ArchivedPatient
+from django.contrib.auth.decorators import login_required
 
 # Adding new Patients
+@login_required
 def add_patient(request):
     if request.method == 'POST':
         form = PatientForm(request.POST)
@@ -15,11 +17,13 @@ def add_patient(request):
     return render(request, 'patients/add_patient.html', {'form': form})
 
 # Patients List
+@login_required
 def patient_list(request):
     patients = Patient.objects.all()
     return render(request, 'patients/patient_list.html', {'patients': patients})
 
 # Patient deletion
+@login_required
 def delete_patient(request, serial_no):
     patient = get_object_or_404(Patient, serial_no=serial_no)
     if request.method == 'POST':
@@ -28,6 +32,7 @@ def delete_patient(request, serial_no):
     return render(request, 'patients/delete_patient.html', {'patient': patient})
 
 # Update Patient
+@login_required
 def edit_patient(request, serial_no):
     patient = get_object_or_404(Patient, serial_no=serial_no)
     if request.method == 'POST':
@@ -40,6 +45,7 @@ def edit_patient(request, serial_no):
     return render(request, 'patients/edit_patient.html', {'form': form, 'patient': patient})
 
 # Refresh Patient List
+@login_required
 def refresh_patient_list(request):
     if request.method == 'POST':
         # Archive current patient list
@@ -61,6 +67,7 @@ def refresh_patient_list(request):
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
 # Archived Patient list
+@login_required
 def archived_patient_list(request):
     archived_patients = ArchivedPatient.objects.all()
     return render(request, 'patients/archived_patient_list.html', {'archived_patients': archived_patients})

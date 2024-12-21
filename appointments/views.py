@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import AppointmentForm, PrescriptionForm
 from .models import Appointment,Doctor,Patient,Prescription
 from medicsandlabs.models import Medicine, LabTest
+from django.contrib.auth.decorators import login_required
 
 # Add new appointment
+@login_required
 def add_appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
@@ -15,6 +17,7 @@ def add_appointment(request):
     return render(request, 'appointments/add_appointment.html', {'form': form})
 
 # Appointments List
+@login_required
 def appointment_list(request):
     appointments = Appointment.objects.all()
     doctors = Doctor.objects.all()
@@ -27,6 +30,7 @@ def appointment_list(request):
     })
 
 # Update appointment
+@login_required
 def edit_appointment(request, serial_no):
     appointment = get_object_or_404(Appointment, serial_no=serial_no)
     if request.method == 'POST':
@@ -39,6 +43,7 @@ def edit_appointment(request, serial_no):
     return render(request, 'appointments/edit_appointment.html', {'form': form})
 
 # Delete appointment
+@login_required
 def delete_appointment(request, serial_no):
     appointment = get_object_or_404(Appointment, serial_no=serial_no)
     if request.method == 'POST':
@@ -47,6 +52,7 @@ def delete_appointment(request, serial_no):
     return render(request, 'appointments/delete_appointment.html', {'appointment': appointment})
 
 # ------------------------------------------------Prescription View--------------------------------------------
+@login_required
 def prescription_view(request, serial_no):
     appointment = get_object_or_404(Appointment, serial_no=serial_no)
     medications = Medicine.objects.all()

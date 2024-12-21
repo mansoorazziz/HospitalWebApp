@@ -1,12 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Medicine, LabTest
 from .forms import MedicineForm, LabTestForm
+from django.contrib.auth.decorators import login_required
 
 # Medicine Views
+@login_required
 def medicine_list(request):
     medicines = Medicine.objects.all()
     return render(request, 'medicsandlabs/medicine_list.html', {'medicines': medicines})
 
+@login_required
 def medicine_create(request):
     if request.method == 'POST':
         form = MedicineForm(request.POST)
@@ -17,6 +20,8 @@ def medicine_create(request):
         form = MedicineForm()
     return render(request, 'medicsandlabs/medicine_form.html', {'form': form})
 
+
+@login_required
 def medicine_update(request, id):
     medicine = get_object_or_404(Medicine, id=id)
     if request.method == 'POST':
@@ -28,6 +33,8 @@ def medicine_update(request, id):
         form = MedicineForm(instance=medicine)
     return render(request, 'medicsandlabs/medicine_form.html', {'form': form})
 
+
+@login_required
 def medicine_delete(request, id):
     medicine = get_object_or_404(Medicine, id=id)
     if request.method == 'POST':
@@ -36,10 +43,13 @@ def medicine_delete(request, id):
     return render(request, 'medicsandlabs/medicine_confirm_delete.html', {'medicine': medicine})
 
 # Lab Test Views
+@login_required
 def labtest_list(request):
     labtests = LabTest.objects.all()
     return render(request, 'medicsandlabs/labtest_list.html', {'labtests': labtests})
 
+
+@login_required
 def labtest_create(request):
     if request.method == 'POST':
         form = LabTestForm(request.POST)
@@ -50,6 +60,8 @@ def labtest_create(request):
         form = LabTestForm()
     return render(request, 'medicsandlabs/labtest_form.html', {'form': form})
 
+
+@login_required
 def labtest_update(request, id):
     labtest = get_object_or_404(LabTest, id=id)
     if request.method == 'POST':
@@ -61,6 +73,8 @@ def labtest_update(request, id):
         form = LabTestForm(instance=labtest)
     return render(request, 'medicsandlabs/labtest_form.html', {'form': form})
 
+
+@login_required
 def labtest_delete(request, id):
     labtest = get_object_or_404(LabTest, id=id)
     if request.method == 'POST':

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Hospital Management System</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Updated to Font Awesome 5 -->
     <style>
         .grid-container {
             display: grid;
@@ -53,10 +53,10 @@
             <div class="grid-item" onclick="location.href='{% url 'appointment_list' %}';">
                 <i class="fa fa-calendar"></i>
                 <h3>Appointment's Section</h3>
-            </div>
-            <div class="grid-item" onclick="location.href='/billing-section';">
-                <i class="fa fa-money"></i>
-                <h3>Bill's Section</h3>
+            </div> 
+            <div class="grid-item" onclick="location.href='{% url 'medicine_list' %}';">
+                <i class="fas fa-prescription-bottle"></i> <!-- Updated to Font Awesome 5 icon class -->
+                <h3>Medicines's Section</h3>
             </div>
         </div>
     </div>
