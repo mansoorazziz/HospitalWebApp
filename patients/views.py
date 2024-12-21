@@ -59,3 +59,8 @@ def refresh_patient_list(request):
         return JsonResponse({'message': 'Patient list refreshed successfully!'})
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+# Archived Patient list
+def archived_patient_list(request):
+    archived_patients = ArchivedPatient.objects.all()
+    return render(request, 'patients/archived_patient_list.html', {'archived_patients': archived_patients})
